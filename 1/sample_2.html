@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Micro Interaction Sample</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-image: linear-gradient(
+        -135deg,
+        #9cece3 0%,
+        #7496ea 40%,
+        #7393ea 60%,
+        #4b3cf2 100%
+      );
+    }
+
+    /* ========================== */
+    /* ダミーのユーザーインターフェース */
+    /* ========================== */
+
+    .ui_container {
+      color: white;
+      text-align: center;
+    }
+
+    .ui_container button {
+      background: white;
+      border: none;
+      cursor: pointer;
+      appearance: none;
+      color: #000;
+      border-radius: 5px;
+      padding: 0.5rem 2rem;
+      font-size: 1.5rem;
+    }
+
+
+    /* ========================== */
+    /* SVG関連 */
+    /* ========================== */
+
+    .svg_container {
+      width: 128px;
+      height: 128px;
+      position: relative;
+      overflow: hidden;
+
+      /* 初期状態では非表示にしておく */
+      display: none;
+    }
+
+    svg.arc_base, svg.arc, svg.circle, svg.check {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* ========================== */
+    /* 回転している円弧 */
+    /* ========================== */
+
+    svg.arc {
+      animation: arc-anim 1s infinite linear;
+    }
+
+    @keyframes arc-anim {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ========================== */
+    /* 最後に出現する外円 */
+    /* ========================== */
+
+    svg.circle {
+      transform-origin: 50%; /* 基準点を中心に */
+      transform: scale(0); /* はじめは0%の大きさに */
+    }
+
+    .complete svg.circle {
+      /* 0.5秒かけて大きくなる。加減速はeaseOutBackという種類で指定 */
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform: scale(1); /* 100%の大きさへ */
+    }
+
+    /* ========================== */
+    /* チェックマーク */
+    /* ========================== */
+    svg.check {
+      transform-origin: 50%;/* 基準点を中心に */
+      transform: scale(0); /* はじめは0%の大きさに */
+    }
+
+    .complete svg.check {
+      /* 0.5秒かけて大きくなる。加減速はeaseOutBackという種類で指定 */
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      /* 0.3秒遅れて表示させる */
+      transition-delay: 0.3s;
+
+      transform: scale(1); /* 100%の大きさへ */
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="ui_container">
+      <button>投稿する</button>
+      <p>
+        <small>※実際には投稿されません</small>
+      </p>
+    </div>
+
+
+    <div class="svg_container">
+
+      <!-- 半透明の円周 -->
+      <svg class="arc_base"
+           width="128" height="128" viewBox="0 0 512 512">
+        <circle
+          cx="256" cy="256"
+          r="180"
+          stroke="white"
+          stroke-width="40"
+          opacity="0.5"
+          fill="none"></circle>
+      </svg>
+
+      <!-- 白い円弧 -->
+      <svg class="arc"
+           width="128" height="128" viewBox="0 0 512 512">
+        <g transform="translate(256, 256)">
+          <path d="M 180,0 a 180 180 0 1 1 0, -1"
+                fill="none"
+                stroke="white"
+                stroke-width="40"
+                stroke-dasharray="1256"
+                stroke-dashoffset="1000"></path>
+        </g>
+      </svg>
+
+      <!-- 白い円 -->
+      <svg class="circle"
+           width="128" height="128" viewBox="0 0 512 512">
+        <circle
+          cx="256" cy="256"
+          r="200"
+          fill="white" />
+      </svg>
+
+      <!-- 青色のチェックマーク -->
+      <svg class="check"
+           width="128" height="128" viewBox="0 0 512 512">
+        <g fill="#7393ea">
+          <g transform="translate(215, 351) rotate(270)">
+            <g transform="rotate(45)">
+              <rect x="-25" y="-25" width="250" height="50"></rect>
+            </g>
+            <g transform="rotate(-45)">
+              <rect x="-25" y="-25" width="150" height="50"></rect>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <script>
+
+    // ボタンをクリックしたら
+    document.querySelector('.ui_container button').addEventListener('click',
+      function () {
+        // 読み込み表示に切り替わる処理
+        document.querySelector('.ui_container').style.display = 'none';
+        document.querySelector('.svg_container').style.display = 'block';
+
+        // 3秒、経過したら
+        setTimeout(function () {
+          // 完了フラグをたてる
+          document.querySelector('.svg_container')
+            .className += ' complete';
+        }, 3000);
+      });
+
+  </script>
+
+</body>
+</html>

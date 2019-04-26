@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Micro Interaction Sample</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-image: linear-gradient(
+        -135deg,
+        #9cece3 0%,
+        #7496ea 40%,
+        #7393ea 60%,
+        #4b3cf2 100%
+      );
+    }
+
+    /* ========================== */
+    /* ダミーのユーザーインターフェース */
+    /* ========================== */
+
+    .ui_container {
+      color: white;
+      text-align: center;
+    }
+
+    .ui_container button {
+      background: white;
+      border: none;
+      cursor: pointer;
+      appearance: none;
+      color: #000;
+      border-radius: 5px;
+      padding: 0.5rem 2rem;
+      font-size: 1.5rem;
+    }
+
+
+    /* ========================== */
+    /* SVG関連 */
+    /* ========================== */
+
+    .svg_container {
+      width: 128px;
+      height: 128px;
+      position: relative;
+      overflow: hidden;
+
+      /* 初期状態では非表示にしておく */
+      display: none;
+    }
+
+    svg.arc_base, svg.arc {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* ========================== */
+    /* 回転している円弧 */
+    /* ========================== */
+
+    svg.arc {
+      animation: arc-anim 1s infinite linear;
+    }
+
+    @keyframes arc-anim {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="ui_container">
+      <button>投稿する</button>
+      <p>
+        <small>※実際には投稿されません</small>
+      </p>
+    </div>
+
+
+    <div class="svg_container">
+
+      <!-- 半透明の円周 -->
+      <svg class="arc_base"
+           width="128" height="128" viewBox="0 0 512 512">
+        <circle
+          cx="256" cy="256"
+          r="180"
+          stroke="white"
+          stroke-width="40"
+          opacity="0.5"
+          fill="none"></circle>
+      </svg>
+
+      <!-- 白い円弧 -->
+      <svg class="arc"
+           width="128" height="128" viewBox="0 0 512 512">
+        <g transform="translate(256, 256)">
+          <path d="M 180,0 a 180 180 0 1 1 0, -1"
+                fill="none"
+                stroke="white"
+                stroke-width="40"
+                stroke-dasharray="1256"
+                stroke-dashoffset="1000"></path>
+        </g>
+      </svg>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // ボタンをクリックしたら
+    document.querySelector('.ui_container button')
+      .addEventListener('click', function () {
+        // 読み込み表示に切り替わる処理
+        document.querySelector('.ui_container').style.display = 'none';
+        document.querySelector('.svg_container').style.display = 'block';
+    });
+
+  </script>
+</body>
+</html>

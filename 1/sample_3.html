@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Micro Interaction Sample</title>
+
+  <style>
+    /* ========================== */
+    /* はじめに回転している円弧 */
+    /* ========================== */
+
+    .arc {
+      fill: red;
+      transform: translate(256px, 256px) rotate(-90deg);
+      stroke-dasharray: 1256;
+      stroke-dashoffset: 1000;
+      animation: arc-anim 1s infinite linear;
+    }
+
+    .complete .arc {
+      transition: all 1s 0.3s;
+      stroke-dashoffset: 0;
+    }
+
+    .complete .loading {
+      transform-origin: 50%;
+      animation: loading-anim 0.4s cubic-bezier(0.55, 0.055, 0.675, 0.19) 0.5s forwards;
+    }
+
+    @keyframes arc-anim {
+      0% {
+        transform: translate(256px, 256px) rotate(0deg);
+      }
+      100% {
+        transform: translate(256px, 256px) rotate(360deg);
+      }
+    }
+
+    @keyframes loading-anim {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    /* ========================== */
+    /* 最後に出現する外円 */
+    /* ========================== */
+
+    .circle {
+      transform-origin: 50%;
+      transform: scale(0);
+    }
+
+    .complete .circle {
+      animation: circle 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.9s forwards;
+    }
+
+    @keyframes circle {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* ========================== */
+    /* 横棒1 */
+    /* ========================== */
+
+    .rect1 {
+      transform-origin: -25px;
+      transform: scaleX(2.5);
+    }
+
+    .complete .rect1 {
+
+      animation: rect1-anim 1s 0.3s forwards;
+    }
+
+    @keyframes rect1-anim {
+
+      20% {
+        transform: scaleX(1);
+      }
+      70% {
+        transform: scaleX(1);
+      }
+      100% {
+        transform: scaleX(4.5);
+      }
+    }
+
+    /* ========================== */
+    /* 横棒2 */
+    /* ========================== */
+
+    .rect2 {
+      transform-origin: -25px;
+      transform: scaleX(2.5);
+    }
+
+    .complete .rect2 {
+      animation: rect2-anim 1s 0.3s forwards;
+
+    }
+
+    @keyframes rect2-anim {
+      20% {
+        transform: scaleX(1);
+      }
+      70% {
+        transform: scaleX(1);
+      }
+      100% {
+        transform: scaleX(2.5);
+      }
+    }
+
+    /* ========================== */
+    /* 横棒3 */
+    /* ========================== */
+
+    .rect3 {
+      transform-origin: -25px;
+    }
+
+    .complete .rect3 {
+      animation: rect3-anim 1s 0.3s forwards;
+
+    }
+
+    @keyframes rect3-anim {
+      20% {
+        transform: scaleX(0);
+      }
+      100% {
+        transform: scaleX(0);
+      }
+    }
+
+    /* ========================== */
+    /* 横棒の親グループ */
+    /* ========================== */
+
+    .mark {
+      transition: all 0.2s;
+      fill: white;
+      transform: translate(256px, 200px) rotate(90deg);
+    }
+
+    .complete .mark {
+      animation: rect-container-anim 1.3s 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    @keyframes rect-container-anim {
+      50% {
+        transform: translate(209px, 351px) rotate(270deg) scale(0.8);
+      }
+      100% {
+        fill: #7393ea;
+        transform: translate(209px, 351px) rotate(270deg) scale(1.2);
+      }
+    }
+  </style>
+  
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-image: linear-gradient(
+        -135deg,
+        #9cece3 0%,
+        #7496ea 40%,
+        #7393ea 60%,
+        #4b3cf2 100%
+      );
+    }
+
+    /* ========================== */
+    /* ダミーのユーザーインターフェース */
+    /* ========================== */
+
+    .ui_container {
+      color: white;
+      text-align: center;
+    }
+
+    .ui_container button {
+      background: white;
+      border: none;
+      cursor: pointer;
+      appearance: none;
+      color: #000;
+      border-radius: 5px;
+      padding: 0.5rem 2rem;
+      font-size: 1.5rem;
+    }
+
+
+    /* ========================== */
+    /* SVG関連 */
+    /* ========================== */
+
+    .svg_container {
+      width: 128px;
+      height: 128px;
+      position: relative;
+      overflow: hidden;
+
+      /* 初期状態では非表示にしておく */
+      display: none;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="ui_container">
+      <button>投稿する</button>
+      <p>
+        <small>※実際には投稿されません</small>
+      </p>
+    </div>
+
+    <div class="svg_container">
+      <svg viewBox="0 0 512 512" width="128" height="128">
+
+        <g id="status">
+          <g class="loading">
+
+            <circle
+              cx="256" cy="256"
+              r="180"
+              stroke="white"
+              stroke-width="40"
+              opacity="0.5"
+              fill="none"></circle>
+
+            <g class="arc">
+              <path d="M 180,0 a 180 180 0 1 1 0, -1" fill="none"
+                    stroke="white" stroke-width="40"></path>
+            </g>
+          </g>
+
+          <circle
+            class="circle"
+            cx="256" cy="256"
+            r="200"
+            fill="white" />
+
+          <g class="mark">
+            <g transform="rotate(45)">
+              <rect x="-25" y="-25" class="rect1" width="50" height="50"></rect>
+            </g>
+            <g transform="rotate(-45)">
+              <rect x="-25" y="-25" class="rect2" width="50" height="50"></rect>
+            </g>
+
+            <g>
+              <rect x="-10" y="-25" class="rect3" width="150" height="50"></rect>
+            </g>
+          </g>
+
+        </g>
+      </svg>
+    </div>
+
+  </div>
+
+  <script>
+
+    // ボタンをクリックしたら読み込み表示に切り替わる処理
+    document.querySelector('.ui_container button').addEventListener('click', function () {
+      document.querySelector('.ui_container').style.display = 'none';
+      document.querySelector('.svg_container').style.display = 'block';
+
+      setTimeout(function () {
+        // 数秒ほど経過したら完了フラグをたてる
+        document.querySelector('.svg_container')
+          .className += ' complete';
+      }, 3000);
+    });
+
+  </script>
+
+</body>
+</html>
