@@ -1,0 +1,232 @@
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  /* ウェブフォントを指定 */
+  font-family: 'Lato', sans-serif;
+  font-weight: 100;
+
+  /* 背景表示 */
+  background-image: url("images/bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+button {
+  /* ボタン要素のデフォルトスタイルをリセット */
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  background: transparent;
+
+  border-radius: 5px;
+  padding: 0.5rem 2rem;
+  font-size: 1.5rem;
+  font-weight: inherit;
+
+  user-select: none;
+}
+
+
+/* タイトル表示 */
+h1 {
+  font-size: calc(100vw / 10);
+  text-align: center;
+  margin: 0;
+  padding: 40px 0 0 0;
+  color: white;
+}
+
+.link {
+  width: 20vw;
+  height: 100px;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  color: white;
+  font-size: 2rem;
+
+  /* トランジションの時間 */
+  transition: all 0.5s;
+
+  button {
+    color: white;
+    width: 100%;
+    height: 100%;
+
+    /* モーション用の指定 */
+    transition: all 0.1s;
+  }
+
+  /*  各ボタンの位置と色 */
+  &.link-1 {
+    transform: translate(10vw, calc(100vh - 200px));
+    background: #ad1457;
+  }
+
+  &.link-2 {
+    transform: translate(40vw, calc(100vh - 200px));
+    background: #6a1b9a;
+  }
+
+  &.link-3 {
+    transform: translate(70vw, calc(100vh - 200px));
+    background: #283593;
+  }
+
+  &.show {
+    // 画面全体に広げる
+    width: 100vw;
+    height: 100vh;
+    // 左上に移動
+    transform: translate(0, 0);
+    z-index: 10;
+
+    button {
+      // ボタンは非表示にする
+      opacity: 0;
+    }
+  }
+}
+
+.detail {
+  /* 画面全体を覆うように左上に配置 */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  padding: 40px;
+  box-sizing: border-box;
+  overflow: auto;
+
+  z-index: 11;
+
+  /* 非表示に設定しておく */
+  visibility: hidden;
+
+  h2 {
+    font-size: 3rem;
+    color: white;
+    margin: 0 0 1rem;
+
+    /* モーション用の指定 */
+    transition: all 0.3s;
+    transform: translate(0px, 30px);
+    opacity: 0;
+  }
+
+  .desc {
+    p.dummy_100 {
+      background: white;
+      width: 100%;
+      height: 1rem;
+    }
+
+    p.dummy_80 {
+      background: white;
+      width: 80%;
+      height: 1rem;
+    }
+
+    /* モーション用の指定 */
+    transition: all 0.3s;
+    transform: translate(0px, 30px);
+    opacity: 0;
+  }
+
+  .ui {
+    margin-top: 2rem;
+    text-align: center;
+
+    /* モーション用の指定 */
+    transition: all 0.3s;
+    transform: translate(0px, 30px);
+    opacity: 0;
+  }
+
+
+  ul {
+    /* 格子状に配置 */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 150px);
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    & > li {
+      width: 150px;
+      height: 150px;
+      background: white;
+
+      /* モーション用の指定 */
+      transition: all 0.5s;
+      transform: translate(0px, 30px);
+      opacity: 0;
+    }
+  }
+
+  /* Closeボタン */
+  button.close {
+    background: white;
+    color: black;
+  }
+
+  /* 出現モーション */
+  &.show {
+    /* 表示状態へ変更する */
+    visibility: visible;
+
+
+    h2 {
+      /* 見出しの出現 */
+      transition: all 0.75s;
+      transition-delay: 200ms;
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+
+
+    .desc {
+      /* 文章の出現 */
+      transition: all 0.75s;
+      transition-delay: 350ms;
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+
+
+    .ui {
+      /* Closeボタンの出現 */
+      transition: all 0.75s;
+      transition-delay: 500ms;
+      transform: translate(0, 0);
+      opacity: 1;
+    }
+
+
+    li {
+      /* サムネイルの出現 */
+      transition: all 0.75s;
+      transform: translate(0, 0);
+      opacity: 1;
+
+      @for $i from 0 through 10 {
+
+        &:nth-child(#{$i}) {
+          transition-delay: $i * 30ms + 300ms;
+        }
+      }
+    }
+  }
+}
